@@ -33,6 +33,5 @@ sub check_can_be_accessed
 		&& $self->coordinates->[$x][$y];
 }
 
-
 1;
 

@@ -12,18 +12,21 @@ use constant WALL_OBJECT => '';
 use constant VOID_OBJECT => '0';
 
 has field 'classes' => (
-	# isa => HashRef [ ArrayRef [StrLength [1, 1]]],
 	default => sub { {} },
+
+	# isa => HashRef [ ArrayRef [StrLength [1, 1]]],
 );
 
 has field '_object_map' => (
-	# isa => HashRef [Str],
 	lazy => 1,
+
+	# isa => HashRef [Str],
 );
 
 has field 'objects' => (
-	# isa => HashRef [Any],
 	default => sub { {} },
+
+	# isa => HashRef [Any],
 );
 
 sub _build_object_map

@@ -11,27 +11,32 @@ use Storable qw(dclone);
 use Game::TileMap::_Utils;
 
 has param 'legend' => (
+
 	# isa => InstanceOf ['Game::TileMap::Legend'],
 );
 
 has field 'coordinates' => (
-	# isa => ArrayRef [ArrayRef [Int]],
 	writer => -hidden,
+
+	# isa => ArrayRef [ArrayRef [Int]],
 );
 
 has field 'size_x' => (
-	# isa => PositiveInt,
 	writer => -hidden,
+
+	# isa => PositiveInt,
 );
 
 has field 'size_y' => (
-	# isa => PositiveInt,
 	writer => -hidden,
+
+	# isa => PositiveInt,
 );
 
 has field '_guide' => (
-	# isa => HashRef [ArrayRef [Tuple [Any, PositiveInt, PositiveInt]]],
 	writer => 1,
+
+	# isa => HashRef [ArrayRef [Tuple [Any, PositiveInt, PositiveInt]]],
 );
 
 with qw(
@@ -61,14 +66,13 @@ sub from_string
 		grep { /\S/ }
 		map { Game::TileMap::_Utils::trim $_ }
 		split "\n", $map_str
-	;
+		;
 
 	my @map;
 	foreach my $line (@map_lines) {
 		my @objects = map {
 			$self->legend->objects->{$_} // die "Invalid map character $_"
 		} split '', $line;
-
 
 		push @map, \@objects;
 	}

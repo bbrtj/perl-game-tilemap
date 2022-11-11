@@ -18,7 +18,7 @@ sub get_all_of_class
 {
 	my ($self, $class) = @_;
 
-	return @{ $self->_guide->{$class} };
+	return @{$self->_guide->{$class}};
 }
 
 sub get_all_of_type
@@ -30,7 +30,6 @@ sub get_all_of_type
 
 	return grep { $_->[0] eq $obj } @all_of_class;
 }
-
 
 1;
 
