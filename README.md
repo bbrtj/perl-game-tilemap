@@ -1,5 +1,5 @@
 # Game::TileMap
-A Perl module for two-dimensional map representation
+A Perl module for two-dimensional tile map representation
 
 ## Code and documentation
 [Game::TileMap on CPAN](https://metacpan.org/release/Game-TileMap)
