@@ -100,3 +100,68 @@ sub add_object
 
 1;
 
+__END__
+
+=head1 NAME
+
+Game::TileMap::Legend - Map contents description
+
+=head1 DESCRIPTION
+
+All object classes must be string.
+
+All map markers are strings with length equal to L</characters_per_tile>. Don't
+use whitespace - map strings are trimmed before parsing.
+
+All objects can be anything, but not C<undef>. String probably works best.
+
+=head2 Attributes
+
+=head3 characters_per_tile
+
+The number of characters (horizontal only) than are used to define one tile.
+
+Optional in the constructor. Default: C<1>
+
+=head2 Methods
+
+=head3 new
+
+Moose-flavored constructor. See L</Attributes> for a list of possible arguments.
+
+Note: it may be easier to call L<Game::TileMap/new_legend>.
+
+=head3 add_wall
+
+	$legend = $legend->add_wall($marker);
+
+Defines a marker used to store a wall. You are required to set this.
+
+Walls are considered not a part of the map.
+
+=head3 add_void
+
+	$legend = $legend->add_void($marker);
+
+Defines a marker used to store a void. You are required to set this.
+
+Voids are considered a part of the map, but they are not accessible. Think of them as chasms.
+
+=head3 add_terrain
+
+	$legend = $legend->add_terrain($marker => $object);
+
+Same as C<< add_object('terrain', $marker => $object) >>.
+
+=head3 add_object
+
+	$legend = $legend->add_object('class', $marker => $object);
+
+Adds a new object with a given class and marker.
+
+=head3 get_class_of_object
+
+	my $class = $legend->get_class_of_object($object);
+
+Returns the object class for a given object defined in the legend.
+
