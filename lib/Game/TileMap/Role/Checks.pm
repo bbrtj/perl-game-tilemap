@@ -10,8 +10,6 @@ use Mooish::AttributeBuilder -standard;
 use Game::TileMap::Legend;
 
 requires qw(
-	size_x
-	size_y
 	coordinates
 );
 
@@ -19,18 +17,20 @@ sub check_within_map
 {
 	my ($self, $x, $y) = @_;
 
-	return $x >= 0 && $x < $self->size_x
-		&& $y >= 0 && $y < $self->size_y
-		&& $self->coordinates->[$x][$y] ne Game::TileMap::Legend::WALL_OBJECT;
+	return !!0 if $x < 0 || $y < 0;
+
+	my $obj = $self->coordinates->[$x][$y];
+	return $obj && $obj->contents ne Game::TileMap::Legend::WALL_OBJECT;
 }
 
 sub check_can_be_accessed
 {
 	my ($self, $x, $y) = @_;
 
-	return $x >= 0 && $x < $self->size_x
-		&& $y >= 0 && $y < $self->size_y
-		&& $self->coordinates->[$x][$y];
+	return !!0 if $x < 0 || $y < 0;
+
+	my $obj = $self->coordinates->[$x][$y];
+	return $obj && $obj->contents;
 }
 
 1;

@@ -7,7 +7,10 @@ use warnings;
 use Moo;
 use Mooish::AttributeBuilder -standard;
 use Storable qw(dclone);
+use Carp qw(croak);
 
+use Game::TileMap::Legend;
+use Game::TileMap::Tile;
 use Game::TileMap::_Utils;
 
 has param 'legend' => (
@@ -18,7 +21,7 @@ has param 'legend' => (
 has field 'coordinates' => (
 	writer => -hidden,
 
-	# isa => ArrayRef [ArrayRef [Int]],
+	# isa => ArrayRef [ArrayRef [Any]],
 );
 
 has field 'size_x' => (
@@ -44,6 +47,13 @@ with qw(
 	Game::TileMap::Role::Helpers
 );
 
+sub new_legend
+{
+	my $self = shift;
+
+	return Game::TileMap::Legend->new(@_);
+}
+
 sub BUILD
 {
 	my ($self, $args) = @_;
@@ -60,6 +70,7 @@ sub BUILD
 sub from_string
 {
 	my ($self, $map_str) = @_;
+	my $per_tile = $self->legend->characters_per_tile;
 
 	my @map_lines =
 		reverse
@@ -70,9 +81,11 @@ sub from_string
 
 	my @map;
 	foreach my $line (@map_lines) {
-		my @objects = map {
-			$self->legend->objects->{$_} // die "Invalid map character $_"
-		} split '', $line;
+		my @objects;
+		while (length $line) {
+			my $marker = substr $line, 0, $per_tile, '';
+			push @objects, ($self->legend->objects->{$marker} // croak "Invalid map marker '$marker'");
+		}
 
 		push @map, \@objects;
 	}
@@ -82,28 +95,27 @@ sub from_string
 
 sub from_array
 {
-	my ($map_aref) = @_;
+	my ($self, $map_aref) = @_;
 	my @map = @{$map_aref};
 
-	my @map_size = (scalar $map[0], scalar @map);
+	my @map_size = (scalar @{$map[0]}, scalar @map);
 	my %guide;
 
-	my $line_num = 0;
-	foreach my $line (@map) {
-		die "invalid map size on line $line_num"
-			if @{$line} != $map_size[0];
+	my @new_map;
+	foreach my $line (0 .. $#map) {
+		croak "invalid map size on line $line"
+			if @{$map[$line]} != $map_size[0];
 
-		my $col_num = 0;
-		for my $obj (@{$line}) {
-			push @{$guide{$self->legend->get_class_of_object($obj)}}, [$obj, $col_num, $line_num];
+		for my $col (0 .. $#{$map[$line]}) {
+			my $prev_obj = $map[$line][$col];
+			my $obj = Game::TileMap::Tile->new(contents => $prev_obj, x => $col, y => $line);
 
-			$col_num += 1;
+			$new_map[$col][$line] = $obj;
+			push @{$guide{$self->legend->get_class_of_object($prev_obj)}}, $obj;
 		}
-
-		$line_num += 1;
 	}
 
-	$self->_set_coordinates(\@map);
+	$self->_set_coordinates(\@new_map);
 	$self->_set_size_x($map_size[0]);
 	$self->_set_size_y($map_size[1]);
 	$self->_set_guide(\%guide);
@@ -119,12 +131,12 @@ sub to_string
 sub to_string_and_mark
 {
 	my ($self, $mark_positions, $with) = @_;
-	$with //= '@';
+	$with //= '@' x $self->legend->characters_per_tile;
 
 	my @lines;
-	my %characters_rev = map {
+	my %markers_rev = map {
 		$self->legend->objects->{$_} => $_
-	} keys $self->legend->objects->%*;
+	} keys %{$self->legend->objects};
 
 	my $mark = \undef;
 	my $coordinates = $self->coordinates;
@@ -132,17 +144,20 @@ sub to_string_and_mark
 		$coordinates = dclone $coordinates;
 
 		foreach my $pos (@{$mark_positions}) {
-			$coordinates->[$pos->[1]][$pos->[0]] = $mark;
+			$coordinates->[$pos->[0]][$pos->[1]] = $mark;
 		}
 	}
 
-	foreach my $coords ($coordinates->@*) {
-		push @lines, join '', map {
-			$_ eq $mark ? $with : $characters_rev{$_}
-		} $coords->@*;
+	foreach my $pos_x (0 .. $#$coordinates) {
+		foreach my $pos_y (0 .. $#{$coordinates->[$pos_x]}) {
+			my $obj = $coordinates->[$pos_x][$pos_y];
+			$lines[$pos_y][$pos_x] = $obj eq $mark ? $with : $markers_rev{$obj->type};
+		}
 	}
 
-	return join "\n", @lines;
+	return join "\n",
+		reverse
+		map { join '', @{$_} } @lines;
 }
 
 1;

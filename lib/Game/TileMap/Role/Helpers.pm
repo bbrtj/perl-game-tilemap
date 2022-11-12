@@ -28,7 +28,7 @@ sub get_all_of_type
 	my $class = $self->legend->get_class_of_object($obj);
 	my @all_of_class = $self->get_all_of_class($class);
 
-	return grep { $_->[0] eq $obj } @all_of_class;
+	return grep { $_->type eq $obj } @all_of_class;
 }
 
 1;

@@ -6,6 +6,7 @@ use warnings;
 
 use Moo;
 use Mooish::AttributeBuilder -standard;
+use Carp qw(croak);
 
 use constant TERRAIN_CLASS => 'terrain';
 use constant WALL_OBJECT => '';
@@ -14,7 +15,13 @@ use constant VOID_OBJECT => '0';
 has field 'classes' => (
 	default => sub { {} },
 
-	# isa => HashRef [ ArrayRef [StrLength [1, 1]]],
+	# isa => HashRef [ ArrayRef [Str]],
+);
+
+has param 'characters_per_tile' => (
+	default => sub { 1 },
+
+	# isa => PositiveInt,
 );
 
 has field '_object_map' => (
@@ -51,39 +58,42 @@ sub get_class_of_object
 	my ($self, $obj) = @_;
 
 	return $self->_object_map->{$obj}
-		// die "no such object $obj";
+		// croak "no such object '$obj' in map legend";
 }
 
 sub add_wall
 {
-	my ($self, $character) = @_;
+	my ($self, $marker) = @_;
 
-	return $self->add_terrain($character, WALL_OBJECT);
+	return $self->add_terrain($marker, WALL_OBJECT);
 }
 
 sub add_void
 {
-	my ($self, $character) = @_;
+	my ($self, $marker) = @_;
 
-	return $self->add_terrain($character, VOID_OBJECT);
+	return $self->add_terrain($marker, VOID_OBJECT);
 }
 
 sub add_terrain
 {
-	my ($self, $character, $object) = @_;
+	my ($self, $marker, $object) = @_;
 
-	return $self->add_object(TERRAIN_CLASS, $character, $object);
+	return $self->add_object(TERRAIN_CLASS, $marker, $object);
 }
 
 sub add_object
 {
-	my ($self, $class, $character, $object) = @_;
+	my ($self, $class, $marker, $object) = @_;
 
-	die "character $character is already used"
-		if exists $self->objects->{$character};
+	croak "marker '$marker' is already used"
+		if exists $self->objects->{$marker};
 
-	push @{$self->classes->{$class}}, $character;
-	$self->objects->{$character} = $object;
+	croak "marker '$marker' has wrong length"
+		unless length $marker == $self->characters_per_tile;
+
+	push @{$self->classes->{$class}}, $marker;
+	$self->objects->{$marker} = $object;
 
 	return $self;
 }
