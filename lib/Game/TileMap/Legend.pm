@@ -111,7 +111,8 @@ Game::TileMap::Legend - Map contents description
 All object classes must be string.
 
 All map markers are strings with length equal to L</characters_per_tile>. Don't
-use whitespace - map strings are trimmed before parsing.
+use whitespace - it is removed before parsing, so can be used freely to improve
+map readability, especially for multicharacter tiles.
 
 All objects can be anything, but not C<undef>. String probably works best.
 

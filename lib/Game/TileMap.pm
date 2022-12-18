@@ -11,7 +11,6 @@ use Carp qw(croak);
 
 use Game::TileMap::Legend;
 use Game::TileMap::Tile;
-use Game::TileMap::_Utils;
 
 has param 'legend' => (
 
@@ -74,8 +73,8 @@ sub from_string
 
 	my @map_lines =
 		reverse
-		grep { /\S/ }
-		map { Game::TileMap::_Utils::trim $_ }
+		grep { length }
+		map { s/\s//g; $_ }
 		split "\n", $map_str
 		;
 
@@ -228,9 +227,11 @@ array of array of L<Game::TileMap::Tile>. Some helpful features are in place:
 
 =item * map markers (usually just single characters) are translated into objects specified in the legend
 
-Map characters can't be whitespace (map lines are trimmed before processing).
+Map characters can't be whitespace (whitespace is removed before processing -
+can be used for improved visibility).
 
-Legend objects can't be falsy, but other than that they can be anything (string, object, reference).
+Legend objects can't be falsy, but other than that they can be anything
+(string, object, reference).
 
 =item * each legend object is assigned to a class, which you can query for later
 
@@ -277,11 +278,11 @@ This way you can get more familiar notation:
 	;
 
 	my $map_str = <<MAP;
-	_,_______~
-	_,__####_~
-	____####_~
-	_,__####_~
-	_,_______~
+	_, __ __ __ _~
+	_, __ ## ## _~
+	__ __ ## ## _~
+	_, __ ## ## _~
+	_, __ __ __ _~
 	MAP
 
 =back

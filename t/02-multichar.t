@@ -17,15 +17,15 @@ $legend
 	;
 
 my $map_str = <<MAP;
-################
-______________##
-............__##
-############__##
-##=1______##__##
-##__m1________##
-############__##
-________m2____##
-################
+## ## ## ## ## ## ## ##
+__ __ __ __ __ __ __ ##
+.. .. .. .. .. .. __ ##
+## ## ## ## ## ## __ ##
+## =1 __ __ __ ## __ ##
+## __ m1 __ __ __ __ ##
+## ## ## ## ## ## __ ##
+__ __ __ __ m2 __ __ ##
+## ## ## ## ## ## ## ##
 MAP
 
 my $map = Game::TileMap->new(legend => $legend, map => $map_str);
@@ -45,6 +45,9 @@ subtest 'testing basic map data' => sub {
 };
 
 subtest 'testing to_string' => sub {
+
+	# get rid of horizontal whitespace
+	$map_str =~ s/\h//g;
 
 	# get rid of trailing newline
 	$map_str =~ s/\v\z//;
