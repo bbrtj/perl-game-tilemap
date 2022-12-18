@@ -130,7 +130,7 @@ sub to_string
 sub to_string_and_mark
 {
 	my ($self, $mark_positions, $with) = @_;
-	$with //= '@' x $self->legend->characters_per_tile;
+	$with //= '!' x $self->legend->characters_per_tile;
 
 	my @lines;
 	my %markers_rev = map {
@@ -357,7 +357,7 @@ Creates a string from a map.
 	print $str = $map->to_string_and_mark([[5, 5]], 'X');
 
 Creates a string from a map and marks given positions with a marker. The
-default marker is C<'@'> (times the number of characters per tile).
+default marker is C<'!'> (times the number of characters per tile).
 
 Useful during debugging.
 

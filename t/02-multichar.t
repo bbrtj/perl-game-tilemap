@@ -55,7 +55,7 @@ subtest 'testing to_string' => sub {
 	is $map->to_string, $map_str, 'to_string ok';
 
 	my $map_str2 = $map_str;
-	substr $map_str2, 0, 2, '@@';
+	substr $map_str2, 0, 2, '!!';
 
 	is $map->to_string_and_mark([[0, 8]]), $map_str2, 'to_string_and_mark ok';
 };

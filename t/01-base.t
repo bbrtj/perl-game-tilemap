@@ -150,11 +150,11 @@ subtest 'testing to_string' => sub {
 	is $map->to_string, $map_str, 'to_string ok';
 
 	my $map_str2 = $map_str;
-	$map_str2 =~ s/a/@/g;
+	$map_str2 =~ s/a/!/g;
 
 	is $map->to_string_and_mark([[4, 8], [6, 9]]), $map_str2, 'to_string_and_mark ok';
 
-	$map_str2 =~ s/@/O/g;
+	$map_str2 =~ s/!/O/g;
 	is $map->to_string_and_mark([[4, 8], [6, 9]], 'O'), $map_str2, 'to_string_and_mark with an O ok';
 };
 
