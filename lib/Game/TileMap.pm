@@ -107,7 +107,12 @@ sub from_array
 
 		for my $col (0 .. $#{$map[$line]}) {
 			my $prev_obj = $map[$line][$col];
-			my $obj = Game::TileMap::Tile->new(contents => $prev_obj, x => $col, y => $line);
+			my $obj = Game::TileMap::Tile->new(
+				legend => $self->legend,
+				contents => $prev_obj,
+				x => $col,
+				y => $line,
+			);
 
 			$new_map[$col][$line] = $obj;
 			push @{$guide{$self->legend->get_class_of_object($prev_obj)}}, $obj;
@@ -176,8 +181,8 @@ Game::TileMap - Representation of tile-based two-dimensional rectangular maps
 	my $legend = Game::TileMap->new_legend;
 
 	$legend
-		->add_wall('#') # required
-		->add_void('.') # required
+		->add_wall('#')
+		->add_void('.')
 		->add_terrain('_' => 'pavement')
 		->add_object('monster_spawns', 'a' => 'spawn_a')
 		->add_object('monster_spawns', 'b' => 'spawn_b')

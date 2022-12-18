@@ -32,7 +32,7 @@ sub get_class_of_object
 {
 	my ($self, $obj) = @_;
 
-	return $self->legend->get_class_of_object($obj->type);
+	return $self->legend->get_class_of_object(ref $obj ? $obj->type : $obj);
 }
 
 1;
