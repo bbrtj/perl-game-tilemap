@@ -137,6 +137,11 @@ subtest 'testing get_all_of_type' => sub {
 	is scalar @minions, 2, 'minions count ok';
 };
 
+subtest 'testing get_class_of_object' => sub {
+	is($map->get_class_of_object(($map->get_all_of_class('terrain'))[0]), 'terrain', 'terrain class ok');
+	is($map->get_class_of_object(($map->get_all_of_class('monster_spawns'))[0]), 'monster_spawns', 'monster_spawns class ok');
+};
+
 subtest 'testing to_string' => sub {
 
 	# get rid of trailing newline

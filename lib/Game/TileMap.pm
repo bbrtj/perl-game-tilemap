@@ -393,6 +393,13 @@ assigned to a given class (found out by string equality check).
 Returns all map objects (in form of L<Game::TileMap::Tile> instances) that are
 of a given object type (found out by string equality check).
 
+=head3 get_class_of_object
+
+	my $class_name = $map->get_class_of_object($object);
+
+Does the reverse of L</get_all_of_class> for one C<$object>, which can be
+either an instance of L<Game::TileMap::Tile> or just a string.
+
 =head1 SEE ALSO
 
 L<Game::LevelMap> is more suited for terminal games.
