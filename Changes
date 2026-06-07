@@ -1,4 +1,6 @@
 {{$NEXT}}
+
+1.001 Sun Jun 7, 2026
 	- add get_tile method which does not autovivify
 	- fix autovivification in check methods
 	- move to Mooish::Base
