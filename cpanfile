@@ -1,3 +1,2 @@
-requires 'Moo' => '2';
-requires 'Mooish::AttributeBuilder' => '1.002';
+requires 'Mooish::Base' => '1.005';
 

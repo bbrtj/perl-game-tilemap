@@ -4,8 +4,7 @@ use v5.10;
 use strict;
 use warnings;
 
-use Moo;
-use Mooish::AttributeBuilder -standard;
+use Mooish::Base -standard;
 use Storable qw(dclone);
 use Carp qw(croak);
 
@@ -13,32 +12,27 @@ use Game::TileMap::Legend;
 use Game::TileMap::Tile;
 
 has param 'legend' => (
-
-	# isa => InstanceOf ['Game::TileMap::Legend'],
+	isa => InstanceOf ['Game::TileMap::Legend'],
 );
 
 has field 'coordinates' => (
+	isa => ArrayRef [ArrayRef [Any]],
 	writer => -hidden,
-
-	# isa => ArrayRef [ArrayRef [Any]],
 );
 
 has field 'size_x' => (
+	isa => PositiveInt,
 	writer => -hidden,
-
-	# isa => PositiveInt,
 );
 
 has field 'size_y' => (
+	isa => PositiveInt,
 	writer => -hidden,
-
-	# isa => PositiveInt,
 );
 
 has field '_guide' => (
+	isa => HashRef [ArrayRef [InstanceOf ['Game::TileMap::Tile']]],
 	writer => 1,
-
-	# isa => HashRef [ArrayRef [Tuple [Any, PositiveInt, PositiveInt]]],
 );
 
 with qw(

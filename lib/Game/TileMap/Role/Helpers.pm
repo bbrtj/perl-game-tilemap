@@ -4,7 +4,7 @@ use v5.10;
 use strict;
 use warnings;
 
-use Moo::Role;
+use Mooish::Base -stardard, -role;
 
 requires qw(
 	legend
