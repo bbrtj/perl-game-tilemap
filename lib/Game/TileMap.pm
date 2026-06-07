@@ -158,6 +158,17 @@ sub to_string_and_mark
 		map { join '', @{$_} } @lines;
 }
 
+sub get_tile
+{
+	my ($self, $x, $y) = @_;
+
+	return undef if $x < 0 || $y < 0;
+	my $coord = $self->coordinates->[$x];
+
+	return $coord && $coord->[$y];
+}
+
+
 1;
 
 __END__
@@ -359,6 +370,13 @@ Creates a string from a map and marks given positions with a marker. The
 default marker is C<'!'> (times the number of characters per tile).
 
 Useful during debugging.
+
+=head3 get_tile
+
+	my $tile = $map->get_tile($pos_x, $pos_y);
+
+Returns a tile at given coordinates, or undef. Unlike raw access to
+L</coordinates>, this will never autovivify.
 
 =head3 check_within_map
 

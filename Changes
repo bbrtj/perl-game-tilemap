@@ -1,4 +1,6 @@
 {{$NEXT}}
+	- add get_tile method which does not autovivify
+	- fix autovivification in check methods
 	- move to Mooish::Base
 	- parameters are now type-checked on object construction
 

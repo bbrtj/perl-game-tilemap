@@ -7,16 +7,14 @@ use warnings;
 use Mooish::Base -stardard, -role;
 
 requires qw(
-	coordinates
+	get_tile
 );
 
 sub check_within_map
 {
 	my ($self, $x, $y) = @_;
 
-	return !!0 if $x < 0 || $y < 0;
-
-	my $obj = $self->coordinates->[$x][$y];
+	my $obj = $self->get_tile($x, $y);
 	return $obj && !$obj->is_wall;
 }
 
@@ -24,9 +22,7 @@ sub check_can_be_accessed
 {
 	my ($self, $x, $y) = @_;
 
-	return !!0 if $x < 0 || $y < 0;
-
-	my $obj = $self->coordinates->[$x][$y];
+	my $obj = $self->get_tile($x, $y);
 	return $obj && !$obj->is_wall && !$obj->is_void;
 }
 
